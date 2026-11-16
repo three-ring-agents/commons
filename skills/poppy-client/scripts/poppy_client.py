@@ -36,9 +36,15 @@ def sign_jwt(header: dict, payload: dict, key_pem: str) -> str:
 def export_jwk_coords(key_pem: str) -> tuple:
     p = subprocess.run(['openssl', 'ec', '-in', key_pem, '-text', '-noout'],
                        capture_output=True, text=True, check=True)
-    hex_str = ''.join([l.strip().replace(':', '') for l in p.stdout.splitlines()
-                       if ':' in l and not any(l.strip().startswith(x) for x in ('ASN1', 'read', 'Private-Key'))])
-    pub_bytes = bytes.fromhex(hex_str)[-65:] # 04 || x(32) || y(32)
+    in_pub, pub_hex = False, ''
+    for line in p.stdout.splitlines():
+        s = line.strip()
+        if s.startswith('pub:'): in_pub = True
+        elif in_pub:
+            if s.startswith('ASN1') or s.startswith('NIST') or not s: break
+            pub_hex += s.replace(':', '')
+    pub_bytes = bytes.fromhex(pub_hex)
+    assert pub_bytes[0] == 0x04
     return b64url(pub_bytes[1:33]), b64url(pub_bytes[33:65])
 
 def fetch_discovery(domain: str) -> dict:
