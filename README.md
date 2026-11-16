@@ -4,6 +4,8 @@ Cross-harness agent skills, 3-Stage Outbound/Inbound OPSEC (`redact-gate` + `ver
 
 ## 1. The 3-Ring OPSEC Architecture (`Ring 1 -> Ring 2 -> Ring 3`)
 
+> **Why 3 Rings? Preventing Cross-Surface Context Bleed:** Connecting a single flat-memory personal agent simultaneously to private accounts (banking, personal inbox, family schedules) and multi-person workspaces (Slack, peer chats, public GitHub) creates catastrophic cross-surface leakage—exemplified by real-world incidents where always-on agents posted private bank balances into shared workplace channels. Separating **Sovereign Local State (Ring 1)**, **Trusted Peer Mesh (Ring 2)**, and **Public Commons (Ring 3)** with deterministic outbound/inbound gates eliminates flat-context bleed by construction.
+
 | Ring | Mount Path & Visibility | Purpose |
 | :--- | :--- | :--- |
 | **🟢 Ring 3: Public Commons** *(This Repo)* | `~/.gemini/commons` (`three-ring-agents/commons`, Apache-2.0) | Reusable cross-harness skills (`skills/`), parameterized templates (`templates/`), 3-section infrastructure playbooks (`playbooks/`), and anonymous hardware stack profiles (`profiles/`). |
