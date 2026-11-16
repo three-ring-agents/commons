@@ -1,0 +1,44 @@
+{
+  "operator": "<your-handle>",
+  "github_repo": "<your-github-username>/antigravity-state",
+  "github_repo_url": "https://github.com/<your-github-username>/antigravity-state",
+  "drive_folder_id": "<your-private-state-drive-folder-id>",
+  "state_doc_id": "<your-private-state-google-doc-id>",
+  "capabilities_guide_doc_id": "{{GOOGLE_DOC_ID}}",
+  "cloud_state_dir": "/shared/user/.gemini/state",
+  "mesh_dir": "/shared/user/.gemini/mesh",
+  "local_hostname": "<your-local-host>",
+  "commons_codename": "three-ring-commons",
+  "commons_dir": "/shared/user/.gemini/commons",
+  "commons_github_repo": "three-ring-agents/commons",
+  "mesh_github_repo": "<your-org>/dttw-mesh",
+  "commons_drive_folder_id": "{{GOOGLE_DRIVE_FOLDER_ID}}",
+  "proposal_doc_id": "{{GOOGLE_DOC_ID}}",
+  "pubsub": {
+    "project_id": "{{PUBSUB_PROJECT_ID}}",
+    "topic_id": "{{PUBSUB_TOPIC_ID}}",
+    "subscription_id": "{{PUBSUB_SUBSCRIPTION_ID}}"
+  },
+  "gchat_rooms": {
+    "humans": {
+      "webhook_url": "",
+      "space_id": "spaces/{{GCHAT_HUMANS_SPACE_ID}}"
+    },
+    "backchannel": {
+      "webhook_url": "",
+      "space_id": "spaces/{{GCHAT_BACKCHANNEL_SPACE_ID}}"
+    }
+  },
+  "_secret_uri_examples": [
+    "op://Agent-<User>/<Item>/<Field> (1Password CLI)",
+    "keychain://<service>/<account> (macOS Keychain via /usr/bin/security)",
+    "secret-tool://<service>/<account> (Linux libsecret / GNOME Keyring)",
+    "file://~/.gemini/state/<secret-file> (Local 0600 file)",
+    "env://<VAR_NAME> (Environment variable)"
+  ],
+  "secrets": {
+    "unifi_api_key": "op://Agent-<User>/UniFi-Local/api_key",
+    "gchat_oauth_json": "file://~/.gemini/state/gchat_oauth.json",
+    "gchat_bearer_token": ""
+  }
+}

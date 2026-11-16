@@ -1,0 +1,19 @@
+{
+  "profile": "macos-catalina-legacy",
+  "host": "dedicated-mac-mini",
+  "hardware": "Mac Mini (Intel Core i5, 16 GB RAM)",
+  "os": "macOS Catalina 10.15.7",
+  "launch_agent_strategy": "open_terminal_fda",
+  "daemon_user": "{{DAEMON_USER}}",
+  "primary_user": "{{PRIMARY_USER}}",
+  "gateway_ports": [
+    8765,
+    8766,
+    8767
+  ],
+  "smart_home_integrations": [
+    "unifi_udm_pro_max",
+    "unifi_udr7",
+    "moen_flo_water"
+  ]
+}

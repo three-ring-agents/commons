@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "description": "Append-only Dead-End & Architectural Decision Ledger so new agent sessions do not re-litigate solved traps without new evidence (e.g., an upstream API/OS release, policy change, or hardware upgrade).",
+  "revisit_policy": "Do not re-attempt a recorded DEAD_END unless new evidence is logged in `revisit_trigger_evidence`.",
+  "dead_ends": [
+    {
+      "id": "DE-OAUTH-01",
+      "domain": "Google Chat / PubSub Cross-Household Auth",
+      "failed_approach": "Service Account JSON keys (`constraints/iam.disableServiceAccountKeyCreation`) or Workspace-Internal OAuth client (`RAPT` 9-hour re-auth expiry).",
+      "working_resolution": "Zero-Key Direct Google Account OAuth 2.0 (`External` Desktop OAuth client + `constraints/iam.allowedPolicyMemberDomains = ALLOW` on `projects/{{PUBSUB_PROJECT_ID}}`).",
+      "revisit_when_new_evidence": "Only if Google Workspace introduces non-expiring workload identity federation for consumer peer accounts."
+    },
+    {
+      "id": "DE-CAL-01",
+      "domain": "Google Family Group Calendar ACLs",
+      "failed_approach": "Granting a bot/concierge account (`<bot-handle>`) writer ACLs on Google's auto-generated `family-<id>` group calendar (`HTTP 400 Bad Request`).",
+      "working_resolution": "Create a dedicated standard shared `'Family'` Google Calendar owned by a parent and share `writer` ACLs with the family members and concierge bot.",
+      "revisit_when_new_evidence": "Only if Google Calendar API v3 lifts ACL restrictions on `group.calendar.google.com` family calendars."
+    },
+    {
+      "id": "DE-SRE-01",
+      "domain": "Smart-Home & NVR Health Monitoring",
+      "failed_approach": "Assuming a device is healthy because its IP/MAC responds to ping or shows `CONNECTED` at Layer 3.",
+      "working_resolution": "Verify cross-layer relational bindings (`SLO-4`: e.g., doorbell `ringSettings` includes the chime ID AND chime state is `CONNECTED`).",
+      "revisit_when_new_evidence": "Always keep relational probes alongside component probes."
+    }
+  ]
+}

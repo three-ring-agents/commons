@@ -1,0 +1,21 @@
+# Example Personal Redaction Rules (~/.gemini/state/redaction_rules.yaml)
+# Copy to ~/.gemini/state/redaction_rules.yaml (NEVER commit your populated file to ~/.gemini/commons)
+
+version: 1
+operator: "<your-handle>"
+
+# Stage 1: Exact case-insensitive terms that must never appear in ~/.gemini/commons
+blocklist_terms:
+  - "<spouse-or-kid-name>"
+  - "<kid-school-name>"
+  - "<home-street-or-ssid>"
+  - "<local-machine-hostname>"
+  - "<private-drive-folder-id>"
+
+# Stage 3 Ratchet: Safe tokens approved for ~/.gemini/commons
+allowlist_tokens:
+  - "{{OPERATOR_EMAIL}}"
+  - "three-ring-agents"
+  - "{{GOOGLE_DOC_ID}}"
+  - "{{GOOGLE_DRIVE_FOLDER_ID}}"
+  - "op://Agent-<User>/"

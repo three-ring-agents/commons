@@ -1,0 +1,13 @@
+repos:
+  - repo: local
+    hooks:
+      - id: redact-gate-scrub-check
+        name: "Ring 3 Outbound Redaction Gate (scrub.py --check)"
+        entry: python3 skills/redact-gate/scripts/scrub.py --check .
+        language: system
+        pass_filenames: false
+      - id: verify-skill-safety
+        name: "Ring 3 Inbound V9 IPI Supply-Chain Safety (verify_skill_safety.py)"
+        entry: python3 skills/redact-gate/scripts/verify_skill_safety.py .
+        language: system
+        pass_filenames: false

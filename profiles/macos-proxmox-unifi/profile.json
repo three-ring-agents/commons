@@ -1,0 +1,59 @@
+{
+  "profile": "macos-proxmox-unifi",
+  "host": "mac-mini",
+  "secondary_hosts": [
+    "proxmox-pve (LXC daemons, LXC browser-enclave, VM home-assistant, VM mobile-enclave)"
+  ],
+  "hardware": "Apple Silicon Mac mini Server + Proxmox VE Hypervisor Node",
+  "os": "macOS (Primary Host) + Debian 12 Bookworm (Proxmox VE / LXC Enclaves)",
+  "launch_agent_strategy": "blue_green_release_locked_launchd_and_systemd",
+  "deployment_model": {
+    "slot_pattern": "releases/<daemon_id>/{blue,green,lkg}",
+    "rollout_cli": "daemonctl rollout <daemon_id> / daemonctl rollback <daemon_id>",
+    "state_isolation": "externalized 0600 SQLite WAL in daemon/state/ and mcp/<server>/state/"
+  },
+  "daemon_user": "{{DAEMON_USER}}",
+  "primary_user": "{{PRIMARY_USER}}",
+  "gateway_ports": [
+    8780,
+    8781,
+    8785,
+    8790,
+    8795,
+    8796,
+    8798
+  ],
+  "monitoring": {
+    "log_max_bytes": 10485760,
+    "log_backup_count": 3,
+    "storagekitd_thread_warning": 1000,
+    "storagekitd_thread_ceiling": 4096,
+    "sre_invariants": [
+      "DE-SRE-01 (Network x Protect Relational Join)",
+      "SLO-1..4",
+      "5GHz >= 2.4GHz + 6dB RF Hygiene"
+    ],
+    "dead_mans_switch": {
+      "pattern": "cloudflare_workers_cron_and_kv",
+      "reference_script": "profiles/macos-proxmox-unifi/cloudflare_worker_dead_mans_switch.js",
+      "cron_schedule": "*/5 * * * *",
+      "auth": "HMAC-SHA256 static secret (zero OAuth expiry risk, zero Drive revision churn)",
+      "monitored_targets": [
+        "mac-mini",
+        "proxmox-pve",
+        "external_cloudflare_tunnel_probe"
+      ],
+      "alert_channels": [
+        "sms_webhook",
+        "gchat_webhook"
+      ]
+    }
+  },
+  "smart_home_integrations": [
+    "unifi_udm_se",
+    "unifi_unvr_pro_protect",
+    "home_assistant",
+    "proxmox_ve",
+    "ip_kvm"
+  ]
+}

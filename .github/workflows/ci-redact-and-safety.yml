@@ -1,0 +1,23 @@
+name: Ring 3 OPSEC & Skill Safety CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  redact-and-safety-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Outbound 3-Stage Redaction Gate (scrub.py --check)
+        run: python3 skills/redact-gate/scripts/scrub.py --check .
+
+        - name: Stage 1 Redaction Scanner (redact_check.py scan)
+          run: ANTIGRAVITY_COMMONS_DIR="${GITHUB_WORKSPACE}" python3 skills/sync-commons/scripts/redact_check.py scan
+
+      - name: Inbound V9 IPI Supply-Chain Verifier (verify_skill_safety.py)
+        run: python3 skills/redact-gate/scripts/verify_skill_safety.py .

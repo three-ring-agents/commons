@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mesh_name": "<your-mesh-name>",
+  "commons_github_repo": "three-ring-agents/commons",
+  "mesh_github_repo": "<your-org>/dttw-mesh",
+  "commons_drive_folder_id": "{{GOOGLE_DRIVE_FOLDER_ID}}",
+  "commons_drive_bundle_id": "{{GOOGLE_DRIVE_BUNDLE_ID}}",
+  "proposal_doc_id": "{{GOOGLE_DOC_ID}}",
+  "safe_commons_doc_ids": [
+    "{{GOOGLE_DOC_ID}}",
+    "{{GOOGLE_DRIVE_FOLDER_ID}}"
+  ],
+  "pubsub": {
+    "project_id": "{{PUBSUB_PROJECT_ID}}",
+    "topic_id": "{{PUBSUB_TOPIC_ID}}"
+  },
+  "gchat_rooms": {
+    "humans": {
+      "space_id": "spaces/{{GCHAT_HUMANS_SPACE_ID}}"
+    },
+    "backchannel": {
+      "space_id": "spaces/{{GCHAT_BACKCHANNEL_SPACE_ID}}"
+    }
+  }
+}
