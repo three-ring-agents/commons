@@ -95,11 +95,11 @@ def execute_request(method: str, url: str, client_id: str, aud: str, sid: str, s
         return {"status": e.code, "error": err_j}
 
 def load_config() -> dict:
-    for p in (os.path.expanduser("~/.gemini/state/config.json"), "/Users/jcchu/.gemini/state/config.json"):
-        if os.path.exists(p):
-            try:
-                with open(p, "r", encoding="utf-8") as f: return json.load(f).get("poppy", {})
-            except Exception: pass
+    p = os.path.expanduser("~/.gemini/state/config.json")
+    if os.path.exists(p):
+        try:
+            with open(p, "r", encoding="utf-8") as f: return json.load(f).get("poppy", {})
+        except Exception: pass
     return {}
 
 def resolve_root_pem(cfg: dict = None) -> tuple:
@@ -114,7 +114,7 @@ def resolve_root_pem(cfg: dict = None) -> tuple:
     op_ref = cfg.get("root_key_pointer")
     if op_ref:
         try:
-            sys.path.insert(0, "/Users/jcchu/agy/mcp/1password-mcp")
+            sys.path.insert(0, os.path.join(os.environ.get("AGY_ROOT", os.path.expanduser("~/agy")), "mcp", "1password-mcp"))
             from op_resolver import resolve_secret_sync
             val = resolve_secret_sync(op_ref)
             if val and "BEGIN" in val:
