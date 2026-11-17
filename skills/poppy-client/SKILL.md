@@ -26,6 +26,9 @@ The skill CLI requires **Python 3.9+** and standard system `/usr/bin/openssl`. I
 ### Command Reference
 
 ```bash
+# 0. Check client status and auto-loaded configuration
+python3 scripts/poppy_client.py status
+
 # 1. Run local self-test (validates keygen, delegation, JWS signing, scope mapping, and approval headers)
 python3 scripts/poppy_client.py selftest
 
@@ -35,16 +38,19 @@ python3 scripts/poppy_client.py discover example.com
 # 3. Inspect company scopes and map scope_hints to Plan-Bound MPA Tiers (Tier 1/2/3)
 python3 scripts/poppy_client.py inspect-scopes example.com
 
-# 4. Generate a signed Poppy-Session JWT header payload
+# 4. Generate a signed Poppy-Session JWT (auto-loads ~/.gemini/state/config.json & ephemeral key)
+python3 scripts/poppy_client.py sign-session example.com GET https://api.example.com/user
+
+# Or with explicit parameters:
 python3 scripts/poppy_client.py sign-session \
   example.com POST https://api.example.com/orders/cancel \
-  https://commons.three-ring-agents.org/agent.json \
+  https://agent.three-ring-agents.org/poppy/agent.json \
   ~/.gemini/state/keys/root_key.pem ~/.gemini/state/keys/del_key.pem
 
 # 5. Execute an authenticated or signed-out Poppy API request
 python3 scripts/poppy_client.py request \
   POST https://api.example.com/orders/cancel \
-  https://commons.three-ring-agents.org/agent.json https://auth.example.com \
+  https://agent.three-ring-agents.org/poppy/agent.json https://auth.example.com \
   ses_01JD8ZK3Q9 usr_pairwise_9821 \
   ~/.gemini/state/keys/root_key.pem ~/.gemini/state/keys/del_key.pem \
   '{"reason": "duplicate"}' "access_token_xyz" \
