@@ -75,3 +75,20 @@ To mitigate cross-vendor tracking and fingerprinting (Issue #31):
 1. **Neutral Client Identity:** The personal agent identifies itself via a neutral shared URI (`https://commons.three-ring-agents.org/agent.json`), never an individual operator's personal domain.
 2. **Ephemeral Delegations:** The root key in `jwks.json` signs a short-lived delegation token (`poppy_dlg`, max 24h) containing an in-memory EC P-256 public key.
 3. **Pairwise Separation:** Every target vendor receives unique pseudonymous `sub` identifiers, unique ephemeral `kid` thumbprints, and unique delegation `jti` nonces.
+
+## 5. Lightweight Discovery & Terms-Hash Helper (`scripts/poppy_discover.py`)
+
+For quick, zero-OpenSSL manifest discovery, `scope_hints` tiering, and deterministic `operations` v3 `terms_revision_hash` calculation:
+
+```bash
+# Discover /.well-known/poppy.json and map scope_hints to Tier 1-3
+python3 scripts/poppy_discover.py --origin https://shop.example.com
+
+# Compute deterministic SHA-256 revision hash for an operations v3 exact-terms JSON file
+python3 scripts/poppy_discover.py --hash-terms /tmp/poppy_terms.json
+
+# Run built-in stdlib self-tests
+python3 scripts/poppy_discover.py --self-test
+```
+
+See also: `playbooks/zero-port-poppy-identity/PLAYBOOK.md` for the neutral Cloudflare Worker `client_id` / `jwks_uri` and edge-verified push quarantine architecture.
