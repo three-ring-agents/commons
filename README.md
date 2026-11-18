@@ -22,6 +22,7 @@ Cross-harness agent skills, 3-Stage Outbound/Inbound OPSEC (`redact-gate` + `ver
 ├── skills/
 │   ├── collab-roe/                          # Shared Rules of Engagement & Google Docs native Kix commenting
 │   ├── gchat/                               # Dual-Identity Google Chat CLI (--send-as agent & --send-as human)
+│   ├── poppy-client/                        # 100% Python stdlib Personal Agent Protocol (Poppy v1.0) client & exact-terms operations
 │   ├── redact-gate/                         # 3-Stage Outbound Redaction Gate (scrub.py) + Inbound V9 IPI Verifier (verify_skill_safety.py)
 │   └── sync-commons/                        # Dual GitHub + Drive bundle sync with 3-Stage Redaction Gate
 ├── templates/
@@ -38,7 +39,8 @@ Cross-harness agent skills, 3-Stage Outbound/Inbound OPSEC (`redact-gate` + `ver
     ├── multi-model-credit-waterline/        # Multi-Model Utility Routing & $100/mo GCP Credit Waterline Controller
     ├── plan-bound-mpa-and-secret-isolation/ # Plan-Bound MPA (mpad), Per-Call AoD & 1Password Vault Isolation
     ├── unifi-security-hardening/            # UniFi VLAN, Firewall & Relational SLO-4 Hardening
-    └── zero-clutter-daemon-iac/             # Turnkey launchd/systemd Daemon IaC Compiler & Cross-Thread Leases
+    ├── zero-clutter-daemon-iac/             # Turnkey launchd/systemd Daemon IaC Compiler & Cross-Thread Leases
+    └── zero-port-poppy-identity/            # Zero-Port Personal Agent Protocol (Poppy v1.0) Federation & 7-Point Audit
 ```
 
 ## 3. Quick Start & Verification Gates
