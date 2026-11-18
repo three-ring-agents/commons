@@ -23,6 +23,7 @@ Our setup enforces four deterministic invariants via `MODEL_CATALOG.json`, `BURS
   - **Lane B (Metered Batch API via `$100/mo` GCP Credits):** Bulk historical backfills and multimodal digests execute against accumulated `$100` monthly credit tranches (`credit_tranches` table on `<BILLING_ACCOUNT_ID>`), deducting spend in strict **First-In, First-Out (FIFO)** order by expiration date (`expires_at_utc`).
 - **Invariant 3 (Strict Separation of One-Time Build/Backfill Cost vs. Ongoing Monthly OpEx):** Every workload in `BURST_QUEUE_WATERLINE.json` declares both its **One-Time Engineering/Backfill Cost (`$ USD`)** and its **Steady-State Monthly Operational Cost (`$/month`)**. Local deterministic Go/Python/SQLite daemons run at **`$0.00/mo`** steady-state token spend after initial build.
 - **Invariant 4 (Pre-Flight Per-Domain Sub-Caps & Promotional Pricing Cliff Guards):** Before every batch API call, `check_pre_flight_guardrail()` verifies per-run and per-domain monthly sub-caps across isolated GCP projects (`<GCP_PROJECT_ID>`) and tracks promotional intro pricing windows so batch backfills complete before scheduled rate step-ups.
+- **Invariant 5 (Unprompted Background Quota Ceiling & Quiet-Hours Gate):** Separate **interactive operator quota** from **proactive background daemon quota**. Unprompted background turns (inbox/calendar sweeps, overnight drafts, reactive watchers) must never exceed `max_proactive_pool_pct` (default `10%` of any 5-hour rolling pool) and must suppress non-P0 LLM wakeups during local Quiet Hours (`22:30–07:00`), relying on `$0` deterministic Python/Go polling until escalation is warranted.
 
 #### Runtime Config Keys (`~/.gemini/state/config.json`)
 
@@ -34,7 +35,9 @@ Our setup enforces four deterministic invariants via `MODEL_CATALOG.json`, `BURS
     "spend_ledger_db": "~/.gemini/state/multi_model_spend_ledger.db",
     "billing_account_placeholder": "<BILLING_ACCOUNT_ID>",
     "gcp_project_placeholder": "<GCP_PROJECT_ID>",
-    "default_waterline_usd": 100.0
+    "default_waterline_usd": 100.0,
+    "max_proactive_pool_pct": 10,
+    "quiet_hours_local": "22:30-07:00"
   },
   "secrets": {
     "gemini_burst_api_key": "op://Agent-<User>/AI-Burst-Keys/gemini_api_key"
@@ -48,6 +51,7 @@ Our setup enforces four deterministic invariants via `MODEL_CATALOG.json`, `BURS
 - **Gotcha 2 (Conflating One-Time Historical Backfill Spend with Recurring Monthly OpEx):** A `$10–$30` one-time multi-year corpus backfill looks expensive if mistaken for a daily recurring job, whereas incremental daily delta syncs on `Flash 3.8` cost `< $1.50/mo` (and local deterministic SQLite FTS5 queries cost `$0.00/mo`). Always separate `one_time_cost_usd` and `steady_state_monthly_usd` in `BURST_QUEUE_WATERLINE.json`.
 - **Gotcha 3 (Unclaimed or Expired `$100/mo` Google Developer Program Credits):** Google AI Ultra (`$199.99/mo`) bundles `$100/mo` in Cloud/GenAI credits (`https://developers.google.com/program/my-benefits`) that accumulate up to `$1,200/yr` with a 12-month expiry per tranche. Tracking each grant in a FIFO SQLite ledger ensures oldest tranches are consumed first before expiration.
 - **Gotcha 4 (Double-Spending on Interrupted Batch Backfills):** Without an idempotent `processed_items` checkpoint table in SQLite (`0600` WAL), restarting a batch job re-processes already extracted records. Always commit per-batch cursors alongside `record_spend_and_deduct_fifo()` using exact `usageMetadata` token counts.
+- **Gotcha 5 (Silent Overnight Quota Burn from Proactive Background Loops):** Always-on consumer agents that wake an LLM on every poll or unrequested overnight dashboard build silently drain the same rolling subscription quota the operator relies on for daytime interactive work. Gate reactive watchers behind zero-token deterministic diffs and cap unprompted LLM turns at `<= 10%` of rolling pool capacity.
 
 ### Pre-Flight & Post-Flight Verification Probes
 
